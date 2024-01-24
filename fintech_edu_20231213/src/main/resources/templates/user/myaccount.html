@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+	  layout:decorate="~{/layouts/default_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+<style type="text/css">
+
+	.account{
+		width:500px;
+/* 		height:100px;  */
+		padding:10px 10px 10px 10px;
+		background-color:	#E0EBFF	;
+		margin-bottom: 20px;
+		border-radius: 10px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+		position: relative;
+	}
+	.account > a{
+		display: inline-block;
+		margin-left: 400px;
+	}
+	.account > span{
+		display: inline-block;
+		width:150px;
+		margin:10px 2px;
+		font-weight: bold;
+	}
+	.res_list > span{
+		display: inline-block;
+		width:200px;
+		margin:2px 2px 10px 30px;
+		text-align: right;
+		color:#3c3c3c;
+		font-weight: bold;
+		font-size:15px;
+	}
+	.res_list{
+		margin-top:20px;
+ 		border-top:1px solid white; 
+	}
+	#rep_account{
+		display: inline-block;
+		position: absolute;
+		right:0px;
+		top:2px;
+		width:30px;
+		font-size: 11px;
+		color:blue;
+	}
+</style>
+<script type="text/javascript">
+	function moreAccount(){
+		$("#my_accounts > .account").show();
+	}
+	
+	$(function(){
+		$("#my_accounts > .account").hide().slice(0,5).show();
+	});
+	
+	//거래내역조회
+	function transactionList(fintech_use_num,clickA_element){
+		$.ajax({
+			url:"/banking/transactionlist",
+			method:"post",
+			dataType:"json",
+			data:{"fintech_use_num":fintech_use_num},
+			async:false,
+			success:function(data){
+				console.log(data.transactionList);
+				var transactionList=data.transactionList;
+				var res_list=transactionList.res_list;
+				var tList="";
+				
+				if(res_list.length==0){
+					tList='<div class="res_list">'
+						 +'	<span>거래내역이 없습니다.</span>'
+						 +"<div>"
+					
+				}else{
+					for(var i =0;i<res_list.length;i++){
+						tList+='<div class="res_list">'
+								+'		<span>'+dateFormat(res_list[i].tran_date,res_list[i].tran_time)+'</span>'
+								+'		<span>'+res_list[i].inout_type+' '+res_list[i].tran_amt+'</span>'
+								+'		<span>'+res_list[i].branch_name+'</span>'
+								+'		<span>잔액:'+res_list[i].tran_amt+'</span>'							
+								+'</div>';
+					}					
+				}
+				$(clickA_element).next(".transactionList").html(tList);
+				
+			},
+			error:function(){
+				alert("통신실패");
+			}
+		});
+	}
+	
+	function dateFormat(tran_date, tran_time){
+		var day=tran_date.substring(0,4)+"-"+
+	       tran_date.substring(4,6)+"-"+
+	       tran_date.substring(6)
+		var time=tran_time.substring(0,2)+":"+
+	       tran_time.substring(2,4)+":"+
+	       tran_time.substring(4)
+		return day+"&nbsp;"+time;
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content" id="bg">
+	<div id="container">
+		<div id="my_menu">
+			<div id="my_status">
+				[[${session.ldto.useremail}]]
+			</div>
+			<nav>
+				<a href="/user/myinfo">나의정보</a>
+				<a href="/banking/myaccount">계좌</a>
+				<a href="/banking/mytransfer">송금</a>
+				<a href="#">카드</a>
+			</nav>
+		</div>
+		<div id="my_content">
+			<div id="my_accounts">
+				<h1>연결된 계좌 목록</h1>
+				<hr/><br/>
+				<th:block th:each="dto:${alist}" >
+					<div class="account">
+						<th:block th:if="${dto.rep_account=='Y'}">
+							<span id="rep_account">대표계좌</span>
+						</th:block>
+<!-- 						<span class="bank_name" th:text="${dto.account_alias}"></span><br> -->
+						<span th:text="${dto.account_num_masked}"></span>
+						<span th:text="${'['+dto.bank_name+']'}"></span>
+						<span th:text="${#numbers.formatInteger(dto.balance_amt,3,'COMMA') + '원'}"></span>
+<!-- 						<a href="#" th:onclick="accountCancel('[[${dto.fintech_use_num}]]')">계좌해지</a> -->
+						<a href="#" th:onclick="transactionList('[(${dto.fintech_use_num})]',this)">거래내역</a>
+						<div class="transactionList">
+							
+						</div>					
+					</div>
+				</th:block> 
+				<a href="#" onclick="moreAccount()">더보기</a>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+* {margin:0;}
+
+header .container{
+	background-color:rgb(3, 177, 252);
+	height:60px;
+    display:flex;
+    justify-content:space-around;
+}
+
+header .container a{
+	display:inline-block;
+	color:white;
+	line-height:60px;
+}
+
+header .container b{
+font-size:20px;
+}
+
+header .container img {
+	width:40px;
+	height:40px;
+	vertical-align:middle;
+}
+
+footer{
+	background-color:rgb(3, 177, 252);
+	height:60px;
+	position:relative;
+	/*transform:translateY(100px);*/
+}
+footer div{
+	text-align:center;
+	line-height:60px;
+	color:white;
+}
+
+body{
+	background-color:#E8F5FF;
+}
+#container{
+	width:1000px;
+	background-color:white;
+	margin:0 auto;
+	overflow: auto;
+	box-shadow: 1px 1px 5px #828282
+}
+#container:after{
+	content:"";
+	display:block;
+	
+}
+
+#my_menu{
+	width:300px;
+	background-color:#DCEBFF;
+	height:735px;
+	padding:5px;
+	float:left;
+	margin-left:10px;
+}
+
+/*왼쪼 메뉴바 위에 나의 상태표시*/
+#my_status{
+	background-image: url("/img/account_profile_icon.png");
+	background-repeat: no-repeat;
+	background-size:60px 60px;
+	background-position: 5px ;
+	padding:40px 0px 10px 70px;
+	background-color:#C8FFFF;
+	box-shadow: 1px 1px 5px #828282
+}
+
+/*왼쪽 메뉴바 시작*/
+#my_menu > nav > a{
+	display:block;
+	text-decoration:none;
+	font-weight:bold;
+	font-size:30px;
+	padding:15px 40px;
+	color:#1E96FF;
+}
+
+#my_menu > nav > a:hover{
+	background-clip:border-box;
+	background-color:#46BEFF;
+	color:	white;
+}
+/* 왼쪽 메뉴바 종료*/
+
+#my_content{
+	width:600px;
+	float:right;
+	padding-top:50px;
+}
+
+/*전체 a태그 밑줄제거, 폰트설정*/
+a{
+	text-decoration:none;
+	color:#0064CD;
+}

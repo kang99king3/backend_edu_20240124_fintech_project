@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.fintech.mapper.BankMapper">
+	
+	<insert id="addUserAccount" parameterType="Account_infoDto">
+		insert into account_info
+		values(null,#{user_seq},#{fintech_use_num},#{balance_amt},#{bank_name},#{account_num_masked},'N')
+	</insert>
+	
+	<select id="myAccount" parameterType="Integer" resultType="Account_infoDto">
+		SELECT ACCOUNT_INFO_SEQ, USER_SEQ,FINTECH_USE_NUM,BALANCE_AMT,BANK_NAME
+			  ,ACCOUNT_NUM_MASKED, rep_account 
+		FROM ACCOUNT_INFO
+		WHERE USER_SEQ = #{user_seq}
+		ORDER BY REP_ACCOUNT DESC
+	</select>
+	
+	<select id="myAccountSearch" parameterType="String" resultType="Account_infoDto">
+		SELECT ACCOUNT_INFO_SEQ, USER_SEQ,FINTECH_USE_NUM,BALANCE_AMT,BANK_NAME,ACCOUNT_NUM_MASKED 
+		FROM ACCOUNT_INFO
+		WHERE FINTECH_USE_NUM = #{fintech_use_num}
+	</select>
+	
+	<select id="repAccount" parameterType="Integer" resultType="Account_infoDto">
+		SELECT ACCOUNT_INFO_SEQ, USER_SEQ,FINTECH_USE_NUM,BALANCE_AMT,BANK_NAME
+		,ACCOUNT_NUM_MASKED , rep_account
+		FROM ACCOUNT_INFO
+		WHERE REP_ACCOUNT = 'Y' AND USER_SEQ = #{user_seq}
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

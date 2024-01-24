@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+	  layout:decorate="~{/layouts/default_layout}">
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
+<script type="text/javascript">
+
+
+</script>
+<style type="text/css">
+	#cont1 > form{
+		width:500px;
+/* 		height:100px;  */
+		padding:10px 10px 10px 10px;
+		background-color:	#E0EBFF	;
+		margin-bottom: 20px;
+		border-radius: 10px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+	}
+	
+	#cont1 > form  input{
+ 		border:0.2px solid #bebebe; 
+		border-radius: 3px;
+		width:100%;
+		height:50px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+		font-size:20px;
+	}
+	
+	#cont1 > form > div{
+		margin:10px 5px 10px 5px;
+	}
+	
+	.title{
+		color:#3c3c3c;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+	
+	.btn{
+		margin-top:10px;
+		width:100%;
+		height:50px;
+		border:0.2px solid #a0a0a0; 
+		box-shadow: 1px 1px 3px #aaaaaa;
+	}
+</style>
+<title>Insert title here</title>
+</head>
+<body>
+<div layout:fragment="content" id="bg">
+	<div id="container">
+		<div id="my_menu">
+			<div id="my_status">
+				[[${session.ldto.useremail}]]
+			</div>
+			<nav>
+				<a href="/user/myinfo">나의정보</a>
+				<a href="/banking/myaccount">계좌</a>
+				<a href="/banking/mytransfer">송금</a>
+				<a href="#">카드</a>
+			</nav>
+		</div>
+		<div id="my_content">
+			<div id="my_transfer">
+<!--                	<button class="btn" id="simplePW" onclick="createPW()">간편 비밀번호 생성</button> -->
+<!--                	<button class="btn" id="conn" onclick="linkAccount()">계좌 연동</button> -->
+<!--            		<div id="desc"> -->
+<!--            			<p>간편비밀번호 생성, 계좌연동을 먼저 해주세요</p> -->
+<!--            		</div> -->
+           		
+				<div id="cont1">
+					<h1>간편송금</h1>
+	                <hr/><br/>
+	           		<form th:action="@{/banking/withdraw_deposit}" method="post" id="transferForm" onsubmit="return AuthPW(event)">
+	           			<div class="cont">
+							  <div class="title">받는 분</div>
+							  <input id="dps_name" name="dps_name" value="강병진" required>
+						</div>
+	
+	           			<div class="cont">
+							  <div class="title">은행</div>
+							  <input id="dps_bank" name="dps_bank" value="우리은행" required>
+						</div>
+	           			<div class="cont">
+							  <div class="title">계좌번호</div>
+							  <input id="dps_fintech_use_num" name="dps_fintech_use_num" value="120220188688941194350329" required>
+						</div>
+	           			<div class="cont">
+							  <div class="title">금액</div>
+							  <input id="dps_tran_amt" name="dps_tran_amt" placeholder="15000원 고정값" required>
+						</div>
+	           			<div>
+							<input type="hidden" value="tt" id="inputs">
+		           			<button type="submit" class="btn" id="transfer" >송금</button>
+	           			</div>
+	           		</form>
+				</div> <!--cont1-->
+			</div> <!--my_transfer -->
+		</div> <!--my_content -->
+ 	</div> <!--container -->
+ 	 <!-- 할인 쿠폰 -->
+<!--     <div> -->
+<!--       <input type="checkbox" id="coupon-box" /> -->
+<!--       <label for="coupon-box"> 5,000원 쿠폰 적용 </label> -->
+<!--     </div> -->
+    <!-- 결제 UI, 이용약관 UI 영역 -->
+<!--     <div id="payment-method"></div> -->
+<!--     <div id="agreement"></div> -->
+<!--       				<button id="payment-button">결제하기</button> -->
+ 	<script>
+//       const coupon = document.getElementById("coupon-box");
+//       const button = document.getElementById("payment-button");
+      
+//       // 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요.
+//       // 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
+//       const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+//       const customerKey = "A0LjJvIjXxw8viEjQEhrt";
+//       const paymentWidget = PaymentWidget(widgetClientKey, customerKey); // 회원 결제
+//       // const paymentWidget = PaymentWidget(widgetClientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+
+//       const paymentMethodWidget = paymentWidget.renderPaymentMethods(
+//         "#payment-method",
+//         { value: 50000 },
+//         { variantKey: "DEFAULT" }
+//       );
+
+//       paymentWidget.renderAgreement(
+//         "#agreement", 
+//         { variantKey: "AGREEMENT" }
+//       );
+
+//       coupon.addEventListener("change", function () {
+//         if (coupon.checked) {
+//           paymentMethodWidget.updateAmount(amount - 5000);
+//         } else {
+//           paymentMethodWidget.updateAmount(amount);
+//         }
+//       });
+
+//       button.addEventListener("click", function () {
+//         // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요. 
+//         // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.  
+//         paymentWidget.requestPayment({
+//           orderId: "1W_pCfO4rzG9szJEcThKe1",
+//           orderName: "토스 티셔츠 외 2건",
+//           successUrl: window.location.origin + "/banking/success",
+//           failUrl: window.location.origin + "/fail",
+//           customerEmail: "customer123@gmail.com",
+//           customerName: "김토스",
+//           customerMobilePhone: "01012341234",
+//         });
+//       });
+      
+    </script>
+</div>
+</body>
+</html>

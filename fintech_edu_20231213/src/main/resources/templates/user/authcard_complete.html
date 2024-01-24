@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	#container{
+		width:100%;
+		margin:100px auto;
+		text-align: center;
+	}
+</style>
+<script type="text/javascript">
+	function completeConfirm(){
+		window.opener.location.href="/main";
+		self.close();
+	}
+</script>
+</head>
+<body>
+	<div id="container">
+		<h1>인증 완료</h1>
+		<a href="#" onclick="completeConfirm()">확인</a>
+	</div>
+</body>
+</html>

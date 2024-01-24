@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+	  layout:decorate="~{layouts/default_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+<style type="text/css">
+	
+</style>
+</head>
+<body>
+<div layout:fragment="content" id="bg">
+	<div id="container">
+		<div id="my_menu">
+			<div id="my_status">
+				[[${session.ldto.useremail}]]
+			</div>
+			<nav>
+				<a href="/user/myinfo">나의정보</a>
+				<a href="/banking/myaccount">계좌</a>
+				<a href="/banking/mytransfer">송금</a>
+				<a href="#">카드</a>
+			</nav>
+		</div>
+		<div id="my_content">
+			<h1>Main화면</h1>
+								
+		</div>
+	</div>
+</div>
+</body>
+</html>

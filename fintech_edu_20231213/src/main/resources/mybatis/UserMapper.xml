@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hk.fintech.mapper.UserMapper">
+
+	<resultMap type="UserDto" id="UserDtoMap">
+		<result property="user_seq" column="user_seq" />
+		<result property="username" column="username" />
+		<result property="useremail" column="useremail" />
+		<result property="userpassword" column="userpassword" />
+		<result property="userseqno" column="userseqno" />
+		<association property="authtokenlist" resultMap="AuthtokenDtoMap"/>
+	</resultMap>
+	
+	<resultMap type="AuthTokenDto" id="AuthtokenDtoMap">
+		<result property="token_seq" column="token_seq" />
+		<result property="user_seq" column="user_seq" />
+		<result property="accesstoken" column="accesstoken" />
+		<result property="scope" column="scope" />
+	</resultMap>
+
+	<insert id="addUser" parameterType="UserDto" useGeneratedKeys="true"
+    						keyProperty="user_seq">
+		INSERT INTO USER_INFO
+		VALUES(NULL,#{username},#{useremail},#{userpassword},#{userseqno})
+	</insert>
+	
+	<select id="loginUser" parameterType="UserDto" resultMap="UserDtoMap">
+		SELECT U.USER_SEQ, U.USEREMAIL,U.USERNAME,U.USERSEQNO, A.ACCESSTOKEN, A.SCOPE 
+		FROM USER_INFO U JOIN AUTH_TOKEN A
+		ON U.USER_SEQ = A.USER_SEQ
+		WHERE U.USEREMAIL=#{useremail} AND u.userpassword = #{userpassword}
+<!-- 		AND A.SCOPE='inquiry login transfer' -->
+	</select> 
+	
+	<insert id="addUserToken" parameterType="AuthTokenDto">
+		INSERT INTO AUTH_TOKEN VALUES(
+			NULL, #{user_seq}, #{accesstoken}, #{scope}
+		)
+	</insert>
+	
+	<select id="getToken" parameterType="integer">
+		SELECT TOKEN_SEQ, USER_SEQ, ACCESSTOKEN, SCOPE 
+		FROM AUTH_TOKEN
+		WHERE USER_SEQ=#{user_seq} AND SCOPE = 'oob'
+	</select>
+	
+	<select id="getCardToken" parameterType="integer">
+		SELECT TOKEN_SEQ, USER_SEQ, ACCESSTOKEN, SCOPE 
+		FROM AUTH_TOKEN
+		WHERE USER_SEQ=#{user_seq} AND SCOPE = 'cardinfo'
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

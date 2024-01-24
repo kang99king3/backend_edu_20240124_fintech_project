@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts">
+<head>
+<meta charset="utf-8" />
+<title>미세소비</title>
+
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<link rel="stylesheet" href="/css/index_layout.css">
+</head>
+<body>	
+	<div th:replace="fragments/index_header::header"></div>
+	
+	<div layout:fragment="content"></div>
+	
+	<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

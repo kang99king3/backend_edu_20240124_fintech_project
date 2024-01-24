@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+      layout:decorate="~{/layouts/index_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="/css/index_styles.css" rel="stylesheet" />
+
+<script type="text/javascript">
+	
+	//사용자 인증 요청하기
+	function authorization(){
+		var url="https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
+			   +"response_type=code&"  //고정값: 인증요청시 반환되는 값의 타입을 의미
+			   +"client_id=4987e938-f84b-4e23-b0a2-3b15b00f4ffd&"  //이용기관 ID
+			   +"redirect_uri=http://localhost:8070/user/authresult&" //응답URI
+			   +"scope=login inquiry transfer&"  // 토큰의 권한
+			   +"state=12345678123456781234567812345678&" // 32자리 난수 설정
+			   +"auth_type=0"; //0:최초 한번 인증, 2:인증생략
+			  
+		window.open(url,"인증하기","width=400px,height=600px");
+	}
+	//인증확인 
+	function authChk(){
+		var useraccesstoken=document.getElementsByName("useraccesstoken")[0].value;
+		var userrefreshtoken=document.getElementsByName("userrefreshtoken")[0].value;
+		var userseqno=document.getElementsByName("userseqno")[0].value;
+		if(useraccesstoken==""||userrefreshtoken==""||userseqno==""){
+			alert("인증 절차를 진행해주세요");
+			document.querySelectorAll("input[type=button]")[0].focus();
+			document.querySelectorAll("input[type=button]")[0].style.backgroundColor="#FFA01E";
+			return false;
+		}
+		return true;
+	}
+</script>
+<style type="text/css">
+	form > span{display: inline-block; color:red;}
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	<h1>회원가입</h1>
+	<form action="/user/adduser" method="post" onsubmit="return authChk()" th:object="${addUserCommand}">
+		<input type="hidden" name="useraccesstoken"  />
+		<span th:if="${#fields.hasErrors('useraccesstoken')}" th:errors="*{useraccesstoken}"></span>
+		<input type="hidden" name="userscope" />
+		<input type="hidden" name="userseqno"  />
+  		<input type="text" name="username" placeholder="username"/>
+  		<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+  		<input type="email" name="useremail" placeholder="useremail"/>
+  		<span th:if="${#fields.hasErrors('useremail')}" th:errors="*{useremail}"></span>
+  		<input type="password" name="userpassword" placeholder="userpassword"/>
+  		<span th:if="${#fields.hasErrors('userpassword')}" th:errors="*{userpassword}"></span>
+		<input type="button" value="인증하기" onclick="authorization()"/>
+		<input type="submit" value="가입하기" />
+	</form>
+	<p style="color:gray;">인증절차 및 계좌 등록을 진행해야 가입이 완료됩니다.</p>
+	</div>
+</div>
+</body>
+</html>

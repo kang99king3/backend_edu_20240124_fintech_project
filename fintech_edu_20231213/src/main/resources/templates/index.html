@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+      layout:decorate="~{layouts/index_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+<script src="//cdn.ckeditor.com/4.19.0/full/ckeditor.js"></script>
+<style type="text/css">
+	form > span{font-size:10px;color:red;display:inline-block;}
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+		<h1>TEST PAY</h1>
+		<form action="/user/login" method="post" th:object="${loginCommand}">
+			<input type="email" name="email" placeholder="  email을 입력하세요" th:field="*{email}"/>
+			<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+			<input type="password" name="password" placeholder="  비밀번호를 입력하세요" th:field="*{password}"/>
+			<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+			<input type="submit" value="로그인"/>
+		</form> 
+		<p>
+			<a title="서비스 예정">비밀번호 찾기</a> | 
+			<a title="서비스 예정">아이디 찾기</a> | 
+			<a href="/user/signup">회원가입</a>
+		</p>
+	</div>
+	<img id="index_img" src="https://img.freepik.com/premium-photo/fintech-icon-on-abstract-financial-technology-background_34663-91.jpg"/>
+<!-- 	<div> -->
+<!-- 		<form action="/fileupload.do" method="post" enctype="multipart/form-data"> -->
+<!-- 			<textarea rows="10" cols="60" name="content" id="content"></textarea> -->
+<!-- 			<script> -->
+<!-- // 				$(function () { -->
+			
+<!-- // 					CKEDITOR.replace('content', { -->
+<!-- // 						filebrowserUploadUrl : '/fileupload.do' -->
+<!-- // 					}); -->
+<!-- // 				}); -->
+<!-- 				</script> -->
+<!-- 		</form> -->
+<!-- 	</div> -->
+</div>
+</body>
+</html>

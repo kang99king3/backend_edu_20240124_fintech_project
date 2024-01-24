@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+	  layout:decorate="~{/layouts/default_layout}">
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script th:inline="javascript">
+ 
+</script>
+<script type="text/javascript">
+
+</script>
+<style type="text/css">
+
+
+	#cont1 > #result-wrapper{
+		width:500px;
+/* 		height:100px;  */
+		padding:10px 10px 10px 10px;
+		background-color:	#E0EBFF	;
+		margin-bottom: 20px;
+		border-radius: 10px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+	}
+	
+	.title,.content{display: inline-block;}
+	.cont{
+		margin-top: 30px;
+	}
+</style>
+<title>Insert title here</title>
+</head>
+<body>
+<div layout:fragment="content" id="bg">
+	<div id="container">
+		<div id="my_menu">
+			<div id="my_status">
+				[[${session.ldto.useremail}]]
+			</div>
+			<nav>
+				<a href="/user/myinfo">나의정보</a>
+				<a href="/banking/myaccount">계좌</a>
+				<a href="/banking/mytransfer">송금</a>
+				<a href="#">카드</a>
+			</nav>
+		</div>
+<!--         <h2 class="title">간편송금완료</h2> -->
+        <div id="my_content">
+            <div class="my_transfer">
+            	<div id="cont1">
+            		<div id="result-wrapper">
+		                <div class="result">
+		                	<p style="font-size:30px;">이체완료<p>
+		                 	<p th:text="${depositResDto.res_list[0].account_holder_name+'님에게 이체되었습니다'}"></p>
+		                </div>
+		               
+		                <div>
+		                	<h4>이체정보</h4>
+		                	<hr class="featurette-divider">
+		                		<div class="cont">
+								  <div class="title">이체결과:</div>
+								  <div class="content">정상</div>
+								</div>
+								<div class="cont">
+								  <div class="title">받는사람:</div>
+								  <div class="content" th:text="${depositResDto.res_list[0].account_holder_name}"></div>
+								</div>
+								
+								<div class="cont">
+								  <div class="title">핀테크이용번호:</div>
+		 						  <div class="content" th:text="${depositResDto.res_list[0].fintech_use_num}"></div>
+								</div>
+								<div class="cont">
+								  <div class="title">이체금액:</div>
+		 						  <div class="content" th:text="${depositResDto.res_list[0].tran_amt+'원'}"></div>
+								</div>
+		                		<div class="cont">
+								  <div class="title">수수료</div>
+								  <div class="content">0원</div>
+								</div>
+			          			<button class="btn" id="transfer" th:onclick="|location.href='@{/banking/transfer_comp}'|">확인</button>
+		                </div>
+		           	
+		           		<div id="chk">
+		           			<p >확인버튼 누르면 송금 완료</p>
+		           		</div>
+	           		</div>
+           		</div>
+             </div>  <!--my_transfer_result      -->
+        </div><!-- my_content -->
+    </div>
+</div>
+</body>
+</html>

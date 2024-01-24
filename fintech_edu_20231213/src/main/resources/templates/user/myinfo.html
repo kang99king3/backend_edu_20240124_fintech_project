@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layouts"
+	  layout:decorate="~{/layouts/default_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+<style type="text/css">
+
+	.account{
+		width:500px;
+/* 		height:100px;  */
+		padding:10px 10px 10px 10px;
+		background-color:	#E0EBFF	;
+		margin-bottom: 20px;
+		border-radius: 10px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+	}
+	.account > a, .card > a{
+		display: inline-block;
+		margin-left: 400px;
+	}
+	
+	#my_account > a, #my_cards > a {
+		display: block;
+	}
+	
+	.bank_name{font-weight:bold;}
+	
+	#my_content > div{
+		margin-bottom: 20px; 
+	}
+	.card{
+		width:500px;
+/*  		height:120px;   */
+		padding:10px 10px 10px 10px;
+		background-color:	#E0EBFF	;
+		margin-bottom: 20px;
+		border-radius: 10px;
+		box-shadow: 1px 1px 3px #aaaaaa;
+/* 		background-image: url("/img/card.png"); */
+/* 		background-repeat: no-repeat; */
+/* 		background-size:260px 180px; */
+/* 		position: relative; */
+		display: inline-block;
+	}
+	.card > span{
+		display: inline-block;
+		width:200px;
+/* 		height:50px; */
+		margin:10px;
+/* 		font-weight: bold; */
+/* 		font-size:12px; */
+	}
+	.card > .card_num{ 
+/* 		position:absolute; */
+/* 		left:100px; */
+/* 		top:100px; */
+		font-weight: bold;
+ 	} 
+ 	.card > .card_id{
+ 		font-weight: bold;
+ 	}
+/* 	.card > .card_name{ */
+/* 		position:absolute; */
+/* 		left:150px; */
+/* 		top:80px; */
+/* 	} */
+</style>
+<script type="text/javascript">
+// 	function accountCancel(fintech_use_num){
+// 		if(confirm("계좌를 해지 하시겠습니까?")){
+// 			location.href="/user/accountcancel?fintech_use_num="+fintech_use_num;
+// 		}
+// 	}
+	function accountConnection(fintech_use_num){
+		if(confirm("계좌를 연결 하시겠습니까?")){
+			location.href="/banking/accountconnection?fintech_use_num="+fintech_use_num;
+		}
+	}
+	function moreAccount(ele){
+// 		$("#my_accounts > .account").toggle();
+		$(ele).prevAll("div").toggle();
+		if($(ele).text()=="더보기"){
+			$(ele).text("닫기");
+		}else{
+			$(ele).text("더보기");
+		}
+		
+	}
+	
+	$(function(){
+		$("#my_accounts > .account").hide().slice(0,2).show();
+		$("#my_cards > .card").hide().slice(0,2).show();
+	});
+	
+	//사용자 인증 요청하기
+	function authorization_card(){
+		var url="https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
+			   +"response_type=code&"  //고정값: 인증요청시 반환되는 값의 타입을 의미
+			   +"client_id=4987e938-f84b-4e23-b0a2-3b15b00f4ffd&"  //이용기관 ID
+			   +"redirect_uri=http://localhost:8070/user/card_token&" //응답URI
+			   +"scope=cardinfo&"  // 토큰의 권한
+			   +"state=12345678123456781234567812345678&" // 32자리 난수 설정
+			   +"auth_type=0"; //0:최초 한번 인증, 2:인증생략
+			  
+		window.open(url,"인증하기","width=400px,height=600px");
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content" id="bg">
+	<div id="container">
+		<div id="my_menu">
+			<div id="my_status">
+				[[${session.ldto.useremail}]]
+			</div>
+			<nav>
+				<a href="/user/myinfo">나의정보</a>
+				<a href="/banking/myaccount">계좌</a>
+				<a href="/banking/mytransfer">송금</a>
+				<a href="#">카드</a>
+			</nav>
+		</div>
+		<div id="my_content">
+			<div id="my_accounts">
+				<h1>나의 계좌</h1>
+				<hr/><br/>
+				<th:block th:each="dto:${myInfoDto.res_list}" >
+					<div class="account">
+						<span class="bank_name" th:text="${dto.account_alias}"></span><br>
+						<span th:text="${dto.account_num_masked}"></span>
+						[<span th:text="${dto.bank_name}"></span>]
+<!-- 						<a href="#" th:onclick="accountCancel('[[${dto.fintech_use_num}]]')">계좌해지</a> -->
+						<a href="#" th:onclick="accountConnection('[(${dto.fintech_use_num})]')">계좌연결하기</a>
+					</div>
+				</th:block> 
+				<a href="#" onclick="moreAccount(this)">더보기</a>
+			</div>
+			<div id="my_cards">
+				<h1>나의 카드</h1>
+				<hr/><br/>
+				<th:block th:if="${authTokenDto == null}" >
+					<h2><small style="color:gray;">본인 인증 후 조회가 가능합니다.</small></h2>
+					<a href="#" onclick="authorization_card()">인증하기</a>
+				</th:block>
+				<th:block th:unless="${authTokenDto == null}" >
+					<th:block th:each="dto:${cardListDto.card_list}">
+						<div class="card">
+							<span th:text="${dto.card_id}" class="card_id"></span>
+							<span th:text="${dto.card_num_masked}" class="card_num"></span>
+							<span th:text="${dto.card_name}" class="card_name"></span>
+							<a href="#" th:onclick="">카드연결하기</a>
+						</div>
+					</th:block>
+					<a href="#" onclick="moreAccount(this)">더보기</a>
+				</th:block>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
